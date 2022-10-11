@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PokemonController;
+use App\Http\Controllers\TeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,18 @@ use App\Http\Controllers\PokemonController;
 */
 
 Route::prefix('v1')->group(function () {
+    // GET    /api/v1/pokemons
+    // GET    /api/v1/pokemons/{id}
     Route::resource('pokemons', PokemonController::class)->only([
         'index', 'show'
     ]);
+
+    // GET     /api/v1/teams
+    // GET     /api/v1/teams/{id}
+    // POST    /api/v1/teams
+    Route::resource('teams', TeamController::class)->only([
+        'index', 'show', 'store'
+    ]);
+    // POST    /api/v1/teams/{id}
+    Route::post('teams/{team}', [TeamController::class, 'set_pokemons']);
 });
