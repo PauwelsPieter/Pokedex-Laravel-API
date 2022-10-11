@@ -56,6 +56,10 @@ class PokemonController extends Controller
     {
         $pokemon = Pokemon::findorfail($pokemon->id);
 
+        // Append array of types to pokemon
+        $types = PokemonType::with('type')->where('pokemon_id', '=', $pokemon->id)->get()->pluck('type.name');
+        $pokemon->types = $types;
+
         return $pokemon;
     }
 }
