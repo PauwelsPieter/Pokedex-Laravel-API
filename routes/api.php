@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImportController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PokemonController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\TeamController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('import_dump', [ImportController::class, 'import_dump']);
 
 Route::prefix('v1')->group(function () {
     // GET    /api/v1/pokemons
