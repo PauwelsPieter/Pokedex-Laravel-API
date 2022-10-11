@@ -5,15 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pokemon extends Model
+class Type extends Model
 {
     use HasFactory;
-
-    // Get all of the pokemon_teams of a pokemon
-    public function pokemon_teams()
-    {
-        return $this->hasMany(PokemonTeam::class);
-    }
 
     // Get all of the pokemon_types of a pokemon
     public function pokemon_types()
