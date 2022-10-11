@@ -35,3 +35,8 @@ Route::prefix('v1')->group(function () {
     // POST    /api/v1/teams/{id}
     Route::post('teams/{team}', [TeamController::class, 'set_pokemons']);
 });
+
+Route::prefix('v2')->group(function () {
+    // GET    /api/v2/pokemons
+    Route::get('pokemons', [PokemonController::class, 'list_paginated']);
+});
