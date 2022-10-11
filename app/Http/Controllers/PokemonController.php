@@ -62,4 +62,37 @@ class PokemonController extends Controller
 
         return $pokemon;
     }
+
+    public function search(Request $request)
+    {
+        // Validate $request
+        $this->validate($request, [
+            'query' => 'required',
+            'limit' => 'int'
+        ]);
+
+        $query = $request->query('query');
+        $limit = $request->query('limit');
+
+        $pokemons = Pokemon::get();
+        $pokemons_filtered = [];
+
+        // Append array of types of every pokemon
+        foreach ($pokemons as $pokemon) {
+            $types = PokemonType::with('type')->where('pokemon_id', '=', $pokemon->id)->get()->pluck('type.name')->toArray();
+            $pokemon->types = $types;
+
+            // Append pokemon to array if name or type matches
+            if ($pokemon->name == $query || in_array($query, $types)) {
+                array_push($pokemons_filtered, $pokemon);
+            }
+        }
+
+        // If limit query exists, apply a limit
+        if ($limit) {
+            $pokemons_filtered = array_slice($pokemons_filtered, 0, $limit);
+        }
+        
+        return $pokemons_filtered;
+    }
 }

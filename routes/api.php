@@ -23,6 +23,9 @@ Route::prefix('v1')->group(function () {
         'index', 'show'
     ]);
 
+    // GET     /api/v1/search
+    Route::get('search', [PokemonController::class, 'search']);
+
     // GET     /api/v1/teams
     // GET     /api/v1/teams/{id}
     // POST    /api/v1/teams
