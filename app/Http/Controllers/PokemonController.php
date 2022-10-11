@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pokemon;
+use App\Models\PokemonType;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
@@ -33,6 +35,12 @@ class PokemonController extends Controller
             }
 
             $pokemons = Pokemon::orderBy($sort_column, $sort_direction)->get();
+        }
+
+        // Append array of types of every pokemon
+        foreach ($pokemons as $pokemon) {
+            $types = PokemonType::with('type')->where('pokemon_id', '=', $pokemon->id)->get()->pluck('type.name');
+            $pokemon->types = $types;
         }
 
         return $pokemons;
