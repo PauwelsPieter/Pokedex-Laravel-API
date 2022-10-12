@@ -71,7 +71,7 @@ class PokemonController extends Controller
         // Validate $request
         $this->validate($request, [
             'query' => 'required',
-            'limit' => 'int'
+            'limit' => 'nullable|integer'
         ]);
 
         $query = $request->query('query');
