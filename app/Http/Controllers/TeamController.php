@@ -75,8 +75,14 @@ class TeamController extends Controller
         // Validate $request
         $this->validate($request, [
             'pokemons' => 'required|array|min:1|max:6',
-            'pokemons.*' => 'required|int|distinct|exists:pokemon,id'
+            'pokemons.*' => 'required|int|distinct|exists:pokemon,id',
+            'token' => 'required|string|min:20|max:20'
         ]);
+
+        if (!Hash::check($request->token, $team->authorization_token)) {
+            return response(['error' => "The token doesn't match"], 404);
+        }
+
         // Create new pokemon_teams
         foreach ($request->pokemons as $pokemon) {
             $pokemon_team = new PokemonTeam();
