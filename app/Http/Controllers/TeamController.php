@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PokemonTeam;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class TeamController extends Controller
 {
@@ -47,9 +49,14 @@ class TeamController extends Controller
         ]);
 
         // Create a new team
+        $random_token = Str::random(20);
+
         $team = new Team();
         $team->name = $request->name;
+        $team->authorization_token = Hash::make($random_token);
         $team->save();
+
+        $team->authorization_token = $random_token;
 
         return $team;
     }
@@ -68,8 +75,14 @@ class TeamController extends Controller
         // Validate $request
         $this->validate($request, [
             'pokemons' => 'required|array|min:1|max:6',
-            'pokemons.*' => 'required|int|distinct|exists:pokemon,id'
+            'pokemons.*' => 'required|int|distinct|exists:pokemon,id',
+            'token' => 'required|string|min:20|max:20'
         ]);
+
+        if (!Hash::check($request->token, $team->authorization_token)) {
+            return response(['error' => "The token doesn't match"], 404);
+        }
+
         // Create new pokemon_teams
         foreach ($request->pokemons as $pokemon) {
             $pokemon_team = new PokemonTeam();
