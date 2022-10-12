@@ -18,6 +18,7 @@ use App\Http\Controllers\TeamController;
 */
 
 Route::post('import_dump', [ImportController::class, 'import_dump']);
+Route::post('import_external/{pokemon}', [ImportController::class, 'import_external']);
 
 Route::prefix('v1')->group(function () {
     // GET    /api/v1/pokemons
