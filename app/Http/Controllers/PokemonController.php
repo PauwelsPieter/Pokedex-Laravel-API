@@ -18,6 +18,10 @@ class PokemonController extends Controller
      */
     public function index(Request $request)
     {
+        $this->validate($request, [
+            'sort' => ['nullable', Rule::in(['name-asc', 'name-desc', 'id-asc', 'id-desc'])]
+        ]);
+
         $pokemons = Pokemon::get();
 
         // If sorting is applied, sort the response
@@ -25,15 +29,6 @@ class PokemonController extends Controller
             $sort = $request->query('sort');
             $sort_column = explode('-', $sort)[0];
             $sort_direction = explode('-', $sort)[1];
-
-            // Check the sorting parameters
-            $columns = Schema::getColumnListing('pokemon');
-            if (!in_array($sort_column, $columns)) {
-                abort(400, "Invalid column for sorting");
-            }
-            if (!in_array($sort_direction, ['asc', 'desc'])) {
-                abort(400, "Invalid direction for sorting");
-            }
 
             $pokemons = Pokemon::orderBy($sort_column, $sort_direction)->get();
         }
