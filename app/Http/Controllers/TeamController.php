@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PokemonTeam;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class TeamController extends Controller
 {
@@ -47,9 +49,14 @@ class TeamController extends Controller
         ]);
 
         // Create a new team
+        $random_token = Str::random(20);
+
         $team = new Team();
         $team->name = $request->name;
+        $team->authorization_token = Hash::make($random_token);
         $team->save();
+
+        $team->authorization_token = $random_token;
 
         return $team;
     }
